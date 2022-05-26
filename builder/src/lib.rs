@@ -1,9 +1,11 @@
 use proc_macro::TokenStream;
-use syn::{DeriveInput, parse_macro_input};
 
-#[proc_macro_derive(Builder)]
+#[allow(dead_code)]
+#[path = "./01.rs"]
+mod _01;
+
+#[proc_macro_derive(Builder, attributes(builder))]
 pub fn derive(input: TokenStream) -> TokenStream {
-    let _derive_input = parse_macro_input!(input as DeriveInput);
-
-    TokenStream::new()
+    _01::token_stream(input)
 }
+
