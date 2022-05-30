@@ -24,8 +24,12 @@ mod _05;
 #[path = "./06.rs"]
 mod _06;
 
+#[allow(dead_code)]
 #[path = "./07.rs"]
 mod _07;
+
+#[path = "./08.rs"]
+mod _08;
 
 #[proc_macro_derive(Builder, attributes(builder))]
 pub fn derive(input: TokenStream) -> TokenStream {
@@ -35,5 +39,6 @@ pub fn derive(input: TokenStream) -> TokenStream {
     // _04::token_stream(input)
     // _05::token_stream(input)
     // _06::token_stream(input)
-    _07::token_stream(input)
+    // _07::token_stream(input)
+    _08::token_stream(input)
 }
