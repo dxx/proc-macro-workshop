@@ -5,11 +5,14 @@ use syn::{DeriveInput, parse_macro_input};
 pub fn token_stream(input: TokenStream) -> TokenStream {
     let derive_input = parse_macro_input!(input as DeriveInput);
     let debug_impl_stream = generate_debug_impl(&derive_input);
-    debug_impl_stream.into()
+    match debug_impl_stream {
+        Ok(stream) => stream.into(),
+        Err(err) => err.into_compile_error().into(),
+    }
 }
 
 /// Generate debug impl.
-fn generate_debug_impl(input: &DeriveInput) -> proc_macro2::TokenStream {
+fn generate_debug_impl(input: &DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
     let ident = &input.ident;
     let name = ident.to_string();
     let fields = parse_fields(&input, |field| {
@@ -19,11 +22,8 @@ fn generate_debug_impl(input: &DeriveInput) -> proc_macro2::TokenStream {
             builder.field(#name, &self.#ident);
         }
     });
-    if let Err(err) = fields {
-        return err.into_compile_error();
-    }
-    let fields = fields.unwrap();
-    quote! {
+    let fields = fields?;
+    let stream = quote! {
         impl std::fmt::Debug for #ident {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
                 let mut builder = f.debug_struct(#name);
@@ -31,7 +31,8 @@ fn generate_debug_impl(input: &DeriveInput) -> proc_macro2::TokenStream {
                 builder.finish()
             }
         }
-    }
+    };
+    Ok(stream)
 }
 
 /// Parse field of struct. Call f function in iteration.
