@@ -16,9 +16,16 @@ mod _03;
 #[path ="./04.rs"]
 mod _04;
 
+#[allow(dead_code)]
 #[path ="./05.rs"]
 mod _05;
 
+#[allow(dead_code)]
+#[path ="./06.rs"]
+mod _06;
+
+#[path ="./07.rs"]
+mod _07;
 
 #[proc_macro_attribute]
 pub fn sorted(args: TokenStream, input: TokenStream) -> TokenStream {
@@ -26,10 +33,14 @@ pub fn sorted(args: TokenStream, input: TokenStream) -> TokenStream {
     // _02::token_stream(args, input)
     // _03::token_stream(args, input)
     // _04::token_stream(args, input)
-    _05::token_stream(args, input)
+    // _05::token_stream(args, input)
+    // _06::token_stream(args, input)
+    _07::token_stream(args, input)
 }
 
 #[proc_macro_attribute]
 pub fn check(args: TokenStream, input: TokenStream) -> TokenStream {
-    _05::check_token_stream(args, input)
+    // _05::check_token_stream(args, input)
+    // _06::check_token_stream(args, input)
+    _07::check_token_stream(args, input)
 }
